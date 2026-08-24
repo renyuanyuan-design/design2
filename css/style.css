@@ -603,17 +603,18 @@ body::after{  content:none !important; }
 /* —— 3 列紧凑网格（校园经历图片卡弹窗，按真实数量自适应列数） —— */
 .polaroids--3col{
   display:grid;
+  width:100%;
   /* 默认 3 列：3 张时三等分排满 */
   grid-template-columns:repeat(3,1fr);
   gap:10px;
-  /* 容器水平居中（让 1/2 张时不至于被左对齐挤压） */
+  /* 容器内元素水平居中 */
   justify-content:center;
   justify-items:center;
 }
 /* 1 张图片：单列居中 + 单卡加宽到合适大小 */
 .polaroids--3col[style*="--pcount: 1"],
 .polaroids--3col[style*="--pcount:1"]{
-  grid-template-columns:minmax(0, 360px);
+  grid-template-columns:minmax(0, 420px);
   justify-content:center;
 }
 /* 2 张图片：2 列等分 + 居中（避免 3 列时左右空一格） */
@@ -631,6 +632,15 @@ body::after{  content:none !important; }
   max-width:100%;
 }
 .polaroids--3col .polaroid img{aspect-ratio:4/3; border-radius:5px;}
+/* 校园弹窗里的长图/PPT：完整展示，不强制 4:3 裁剪 */
+.campus-modal .polaroids--3col .polaroid img{
+  aspect-ratio:auto !important;
+  width:100% !important;
+  height:auto !important;
+  max-height:60vh !important;
+  object-fit:contain !important;
+  border-radius:5px;
+}
 .polaroids--3col .polaroid figcaption{
   margin-top:6px; font-size:.7rem;
 }
@@ -1313,7 +1323,29 @@ body::after{  content:none !important; }
 }
 @media (max-width:640px){
   .campus-modal__panel{padding:24px 18px 20px;}
-  .campus-modal .polaroids--3col{grid-template-columns:repeat(2,1fr);}
+  .campus-modal .polaroids--3col{
+    width:100%;
+    grid-template-columns:repeat(3, minmax(0, 1fr));
+    justify-content:center;
+    justify-items:center;
+  }
+  /* 1 张图：单列居中 */
+  .campus-modal .polaroids--3col[style*="--pcount: 1"],
+  .campus-modal .polaroids--3col[style*="--pcount:1"]{
+    grid-template-columns:minmax(0, 360px);
+  }
+  /* 2 张图：两列居中 */
+  .campus-modal .polaroids--3col[style*="--pcount: 2"],
+  .campus-modal .polaroids--3col[style*="--pcount:2"]{
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+    max-width:640px;
+    margin:0 auto;
+  }
+  /* 3 张图：三列居中 */
+  .campus-modal .polaroids--3col[style*="--pcount: 3"],
+  .campus-modal .polaroids--3col[style*="--pcount:3"]{
+    grid-template-columns:repeat(3, minmax(0, 1fr));
+  }
 }
 
 /* —— 技能卡牌 —— */
@@ -1585,8 +1617,8 @@ body::after{  content:none !important; }
   /* 实习经历:移动端照片卡显示完整，不被压缩成紫色竖条 */
   .exp-card--photo{padding:10px; max-width:100%;}
   .exp-card--photo img{max-height:280px; width:100%; object-fit:contain;}
-  /* 实习照片墙：移动端改2列，让一组照片仍在一张卡框内、视觉成组 */
-  .polaroids{grid-template-columns:repeat(2,1fr) !important; gap:8px !important;}
+  /* 实习照片墙：移动端改2列，让一组照片仍在一张卡框内、视觉成组（仅限实习经历，不波及校园弹窗） */
+  #internship .polaroids{grid-template-columns:repeat(2,1fr) !important; gap:8px !important;}
   /* 移动端 polaroid 去掉"独立拍立得"白卡样式，避免与照片组卡混淆；
      让所有照片作为一个整体出现，不旋转、不带阴影 */
   .polaroid{background:transparent !important; padding:4px !important; box-shadow:none !important; transform:none !important; border-radius:8px !important;}

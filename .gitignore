@@ -11,3 +11,6 @@ __pycache__/
 
 # 临时截图（非站点资源）
 *.png.bak
+node_modules/
+package*.json
+*.log
